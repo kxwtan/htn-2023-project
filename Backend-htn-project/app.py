@@ -1,27 +1,12 @@
-from flask import Flask, Response, render_template
-import cv2
+import time
+from flask import Flask, jsonify, request, Response
+import pandas as pd
+app = Flask(__name__)
 
-app=Flask(__name__)
+@app.route('/get_latest_et_data', methods=['GET'])
+def get_latest_et_data():
+    df = pd.read_csv('data.csv', header=None, names=["col1", "x", "y", "z", "vergence"])
 
-camera = cv2.VideoCapture(0)
+    return json_data_list
 
-@app.route('/video_feed')
-def video_feed() :
-    return Response(gen_frames(), mimetype='multipat/x-mixed-replace;')
-
-def gen_frames() :
-    while True:
-        success, frame = camera.read()  # read the camera frame
-        if not success:
-            break
-        else:
-            ret, buffer = cv2.imencode('.jpg', frame)
-            frame = buffer.tobytes()
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-
-@app.route('/')
-def index():
-    return render_template('index.html')
-
-
+app.run()
