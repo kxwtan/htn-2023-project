@@ -10,7 +10,7 @@ class FrontendData:
     def __init__(self):
         # Instantiate an API object
         # TODO: Update the device name to match your device
-        self._api = adhawkapi.frontend.FrontendApi(ble_device_name='ADHAWK MINDLINK-257')
+        self._api = adhawkapi.frontend.FrontendApi(ble_device_name='ADHAWK MINDLINK-302')
 
         # Tell the api that we wish to receive eye tracking data stream
         # with self._handle_et_data as the handler
@@ -85,8 +85,10 @@ class FrontendData:
 def main():
     ''' App entrypoint '''
     frontend = FrontendData()
-    print(frontend._handle_et_data())
-    print("done")
+    
+    # App Entry Point
+    print("Entry: main()")
+
     try:
         while True:
             time.sleep(1)
