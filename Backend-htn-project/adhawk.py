@@ -3,6 +3,11 @@ import time
 import adhawkapi
 import adhawkapi.frontend
 
+notification_threshhold = 4
+
+close_counter = 0 # notifies user that there is a warning
+
+far_counter = 0 # resets close counter after 1/2 * notification_threshhold
 
 class FrontendData:
     ''' BLE Frontend '''
@@ -34,23 +39,61 @@ class FrontendData:
         ''' Handles the latest et data '''
         if et_data.gaze is not None:
             xvec, yvec, zvec, vergence = et_data.gaze
+
+            global close_counter
+            global far_counter
+            global notification_threshhold
+
+            if close_counter >= notification_threshhold:
+                
+                print("Warning!!!!!")
+                print("Warning!!!!!")
+                print("Warning!!!!!")
+                print("Warning!!!!!")
+                print("Warning!!!!!")
+                print("Warning!!!!!")
+                print("Warning!!!!!")
+                print("Warning!!!!!")
+                print("Warning!!!!!")
+                print("Warning!!!!!")
+                print("Warning!!!!!")
+                print("Warning!!!!!")
+                print("Warning!!!!!")
+                print("Warning!!!!!")
+                print("Warning!!!!!")
+                print("Warning!!!!!")
+                close_counter = 0
+                far_counter = 0
+            elif far_counter >= notification_threshhold:
+                close_counter = 0
+                far_counter = 0
+
+            if zvec >= -5:
+                close_counter += 1
+            elif zvec <= -10:
+                far_counter += 1
+
+            print(f'Close_counter={close_counter}')
+            print(f'Far_counter={far_counter}')
+            print(f'Gaze={zvec:.2f}')
+
             print(f'Gaze={xvec:.2f},y={yvec:.2f},z={zvec:.2f},vergence={vergence:.2f}')
 
-        if et_data.eye_center is not None:
-            if et_data.eye_mask == adhawkapi.EyeMask.BINOCULAR:
-                rxvec, ryvec, rzvec, lxvec, lyvec, lzvec = et_data.eye_center
-                print(f'Eye center: Left=(x={lxvec:.2f},y={lyvec:.2f},z={lzvec:.2f}) '
-                      f'Right=(x={rxvec:.2f},y={ryvec:.2f},z={rzvec:.2f})')
+        # if et_data.eye_center is not None:
+        #     if et_data.eye_mask == adhawkapi.EyeMask.BINOCULAR:
+        #         rxvec, ryvec, rzvec, lxvec, lyvec, lzvec = et_data.eye_center
+        #         print(f'Eye center: Left=(x={lxvec:.2f},y={lyvec:.2f},z={lzvec:.2f}) '
+        #               f'Right=(x={rxvec:.2f},y={ryvec:.2f},z={rzvec:.2f})')
 
-        if et_data.pupil_diameter is not None:
-            if et_data.eye_mask == adhawkapi.EyeMask.BINOCULAR:
-                rdiameter, ldiameter = et_data.pupil_diameter
-                print(f'Pupil diameter: Left={ldiameter:.2f} Right={rdiameter:.2f}')
+        # if et_data.pupil_diameter is not None:
+        #     if et_data.eye_mask == adhawkapi.EyeMask.BINOCULAR:
+        #         rdiameter, ldiameter = et_data.pupil_diameter
+        #         print(f'Pupil diameter: Left={ldiameter:.2f} Right={rdiameter:.2f}')
 
-        if et_data.imu_quaternion is not None:
-            if et_data.eye_mask == adhawkapi.EyeMask.BINOCULAR:
-                x, y, z, w = et_data.imu_quaternion
-                print(f'IMU: x={x:.2f},y={y:.2f},z={z:.2f},w={w:.2f}')
+        # if et_data.imu_quaternion is not None:
+        #     if et_data.eye_mask == adhawkapi.EyeMask.BINOCULAR:
+        #         x, y, z, w = et_data.imu_quaternion
+        #         print(f'IMU: x={x:.2f},y={y:.2f},z={z:.2f},w={w:.2f}')
 
     @staticmethod
     def _handle_events(event_type, timestamp, *args):
