@@ -1,0 +1,2 @@
+flask==2.2.2
+opencv_python==4.8.0.76
