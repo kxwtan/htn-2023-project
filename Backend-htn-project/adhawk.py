@@ -85,8 +85,10 @@ class FrontendData:
 def main():
     ''' App entrypoint '''
     frontend = FrontendData()
-    print(frontend._handle_et_data())
-    print("done")
+    
+    # App Entry Point
+    print("Entry: main()")
+
     try:
         while True:
             time.sleep(1)
