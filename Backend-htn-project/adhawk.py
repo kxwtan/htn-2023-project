@@ -11,11 +11,11 @@ close_counter = 0 # notifies user that there is a warning
 
 far_counter = 0 # resets close counter after 1/2 * notification_threshhold
 
-zvec = 0
+zvec_g = 0
 
-xvec = 0
+xvec_g = 0
 
-yvec = 0
+yvec_g = 0
 
 class FrontendData:
     ''' BLE Frontend '''
@@ -51,6 +51,13 @@ class FrontendData:
             global close_counter
             global far_counter
             global notification_threshhold
+            global xvec_g
+            global yvec_g
+            global zvec_g
+
+            xvec_g = xvec
+            yvec_g = yvec
+            zvec_g = zvec
 
             if close_counter >= notification_threshhold:
                 
@@ -144,16 +151,16 @@ def get_far_counter():
     return far_counter
 
 def get_zvec():
-    global zvec
-    return zvec
+    global zvec_g
+    return zvec_g
 
 def get_yvec():
-    global yvec
-    return yvec
+    global yvec_g
+    return yvec_g
 
 def get_xvec():
-    global xvec
-    return xvec
+    global xvec_g
+    return xvec_g
 
 def main():
     ''' App entrypoint '''
