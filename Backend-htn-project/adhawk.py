@@ -1,5 +1,7 @@
 import time
 
+import math
+
 import adhawkapi
 import adhawkapi.frontend
 
@@ -8,6 +10,12 @@ notification_threshhold = 4
 close_counter = 0 # notifies user that there is a warning
 
 far_counter = 0 # resets close counter after 1/2 * notification_threshhold
+
+zvec_g = 0
+
+xvec_g = 0
+
+yvec_g = 0
 
 class FrontendData:
     ''' BLE Frontend '''
@@ -43,6 +51,13 @@ class FrontendData:
             global close_counter
             global far_counter
             global notification_threshhold
+            global xvec_g
+            global yvec_g
+            global zvec_g
+
+            xvec_g = xvec
+            yvec_g = yvec
+            zvec_g = zvec
 
             if close_counter >= notification_threshhold:
                 
@@ -68,16 +83,19 @@ class FrontendData:
                 close_counter = 0
                 far_counter = 0
 
-            if zvec >= -5:
+            distance = math.sqrt(zvec**2 + xvec**2)
+
+            if distance <= 5:
                 close_counter += 1
             elif zvec <= -10:
                 far_counter += 1
 
             print(f'Close_counter={close_counter}')
             print(f'Far_counter={far_counter}')
-            print(f'Gaze={zvec:.2f}')
+            print(f'Z-Gaze={zvec:.2f}')
+            print(f'Distance={distance}')
 
-            print(f'Gaze={xvec:.2f},y={yvec:.2f},z={zvec:.2f},vergence={vergence:.2f}')
+            print(f'Gaze:x={xvec:.2f},y={yvec:.2f},z={zvec:.2f},vergence={vergence:.2f}')
 
         # if et_data.eye_center is not None:
         #     if et_data.eye_mask == adhawkapi.EyeMask.BINOCULAR:
@@ -124,6 +142,25 @@ class FrontendData:
     def _handle_tracker_disconnect(self):
         print("Tracker disconnected")
 
+def get_close_counter():
+    global close_counter
+    return close_counter
+
+def get_far_counter():
+    global far_counter
+    return far_counter
+
+def get_zvec():
+    global zvec_g
+    return zvec_g
+
+def get_yvec():
+    global yvec_g
+    return yvec_g
+
+def get_xvec():
+    global xvec_g
+    return xvec_g
 
 def main():
     ''' App entrypoint '''
