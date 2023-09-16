@@ -6,8 +6,8 @@ app=Flask(__name__)
 camera = cv2.VideoCapture(0)
 
 @app.route('/video_feed')
-def vid_feed() :
-    return Response(gen_frames(), mimetype='multipat/x-mixed-replace; boundary=frame')
+def video_feed() :
+    return Response(gen_frames(), mimetype='multipat/x-mixed-replace;')
 
 def gen_frames() :
     while True:
@@ -19,3 +19,9 @@ def gen_frames() :
             frame = buffer.tobytes()
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+
