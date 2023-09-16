@@ -1,6 +1,8 @@
 from flask import Flask, Response, render_template
 import cv2
 
+from adhawk import *
+
 app=Flask(__name__)
 
 camera = cv2.VideoCapture(0)
@@ -22,6 +24,7 @@ def gen_frames() :
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    main()
+    return render_template('index.html', hello = get_xvec())
 
 
