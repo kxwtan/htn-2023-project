@@ -42,3 +42,7 @@ pandas
 cohere
 twilio
 python-dotenv
+pandas
+cohere
+twilio
+python-dotenv
