@@ -1,30 +1,19 @@
-from flask import Flask, Response, render_template
-import cv2
+import time
+from flask import Flask, jsonify, request, Response
+from flask_cors import CORS
+import pandas as pd
+import csv
+app = Flask(__name__)
+CORS(app)
 
-from adhawk import *
+@app.route('/get_latest_et_data', methods=['GET'])
+def get_latest_et_data():
+    data = []
+    with open('data.csv', 'r') as file:
+        reader = csv.reader(file)
+        for row in reader:
+            data.append(row)
+            
+    return {'data':data}
 
-app=Flask(__name__)
-
-camera = cv2.VideoCapture(0)
-
-@app.route('/video_feed')
-def video_feed() :
-    return Response(gen_frames(), mimetype='multipat/x-mixed-replace;')
-
-def gen_frames() :
-    while True:
-        success, frame = camera.read()  # read the camera frame
-        if not success:
-            break
-        else:
-            ret, buffer = cv2.imencode('.jpg', frame)
-            frame = buffer.tobytes()
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-
-@app.route('/')
-def index():
-    main()
-    return render_template('index.html', hello = get_xvec())
-
-
+app.run()
