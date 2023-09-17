@@ -13,3 +13,4 @@ opencv-python==4.8.0.76
 typing_extensions==4.7.1
 Werkzeug==2.3.7
 pygame
+pandas
