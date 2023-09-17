@@ -14,3 +14,6 @@ typing_extensions==4.7.1
 Werkzeug==2.3.7
 pygame
 pandas
+cohere
+twilio
+python-dotenv

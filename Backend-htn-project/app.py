@@ -9,6 +9,8 @@ def get_latest_et_data():
 
     json_data_list = df[["x", "y", "z", "vergence"]].to_dict(orient="records")
 
+    json_data_list = df[["x", "y", "z", "vergence"]].to_dict(orient="records")
+    
     return json_data_list
 
 app.run()
