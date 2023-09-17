@@ -89,7 +89,7 @@ class FrontendData:
             # print(f'Z-Gaze={zvec:.2f}')
             # print(f'Distance={distance}')
 
-            print(f'Gaze:x={xvec:.2f},y={yvec:.2f},z={zvec:.2f},vergence={vergence:.2f}')
+            # print(f'Gaze:x={xvec:.2f},y={yvec:.2f},z={zvec:.2f},vergence={vergence:.2f}')
 
             end_time = time.time()
 
