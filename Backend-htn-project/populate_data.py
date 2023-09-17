@@ -21,6 +21,8 @@ xvec_g = 0
 
 yvec_g = 0
 
+message_sent = False
+
 
 
 df = pd.DataFrame()
@@ -71,10 +73,16 @@ class FrontendData:
             distance = math.sqrt(zvec**2 + xvec**2)
 
             if close_counter >= notification_threshhold:
-                
+                mixer.init()
+                sound=mixer.Sound("ping.mp3")
+                sound.play()
                 close_counter = 0
                 far_counter = 0
                 distance = 0
+                if message_sent == False:
+                    print("SENT!")
+                    generateWarning()
+                    message_sent = True
             elif far_counter >= notification_threshhold:
                 close_counter = 0
                 far_counter = 0
