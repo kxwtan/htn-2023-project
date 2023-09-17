@@ -1,27 +1,22 @@
 import time
-
+from flask import Flask, Response, render_template
+import pandas as pd
 import math
-
 import adhawkapi
 import adhawkapi.frontend
 
-from pygame import mixer
-
-from textGen import generateWarning
-
 notification_threshhold = 4
-
+app=Flask(__name__)
 close_counter = 0 # notifies user that there is a warning
 
 far_counter = 0 # resets close counter after 1/2 * notification_threshhold
-
 zvec_g = 0
 
 xvec_g = 0
 
 yvec_g = 0
 
-message_sent = False
+df = pd.DataFrame()
 
 class FrontendData:
     ''' BLE Frontend '''
@@ -60,41 +55,36 @@ class FrontendData:
             global xvec_g
             global yvec_g
             global zvec_g
-            global message_sent
 
             xvec_g = xvec
             yvec_g = yvec
             zvec_g = zvec
 
-            distance = math.sqrt(zvec**2 + xvec**2)
-
             if close_counter >= notification_threshhold:
-                mixer.init()
-                sound=mixer.Sound("ping.mp3")
-                sound.play()
                 close_counter = 0
                 far_counter = 0
-                distance = 0
-                if message_sent == False:
-                    print("SENT!")
-                    generateWarning()
-                    message_sent = True
             elif far_counter >= notification_threshhold:
                 close_counter = 0
                 far_counter = 0
+
+            distance = math.sqrt(zvec**2 + xvec**2)
 
             if distance <= 5:
                 close_counter += 1
             elif zvec <= -10:
                 far_counter += 1
 
-            # print(f'Close_counter={close_counter}')
-            # print(f'Far_counter={far_counter}')
-            # print(f'Z-Gaze={zvec:.2f}')
-            # print(f'Distance={distance}')
+            print(f'Close_counter={close_counter}')
+            print(f'Far_counter={far_counter}')
+            print(f'Z-Gaze={zvec:.2f}')
+            print(f'Distance={distance}')
 
-            # print(f'Gaze:x={xvec:.2f},y={yvec:.2f},z={zvec:.2f},vergence={vergence:.2f}')
+            print(f'Gaze:x={xvec:.2f},y={yvec:.2f},z={zvec:.2f},vergence={vergence:.2f}')
 
+            df = pd.DataFrame({'x':[round(xvec, 2)], 'y':[round(yvec, 2)], 'z':[round(zvec, 2)], 'vergence':[round(zvec, 2)]}) 
+            df.to_csv("data.csv", mode='a', header=False)
+
+            
         # if et_data.eye_center is not None:
         #     if et_data.eye_mask == adhawkapi.EyeMask.BINOCULAR:
         #         rxvec, ryvec, rzvec, lxvec, lyvec, lzvec = et_data.eye_center
@@ -160,15 +150,23 @@ def get_xvec():
     global xvec_g
     return xvec_g
 
+
 def main():
+    
+    f = open("data.csv", "w")
+    f.truncate()
+    f.close()
     ''' App entrypoint '''
     frontend = FrontendData()
+    # App Entry Point
+    print("Entry: main()")
 
     try:
         while True:
             time.sleep(1)
     except (KeyboardInterrupt, SystemExit):
         frontend.shutdown()
+
 
 if __name__ == '__main__':
     main()
