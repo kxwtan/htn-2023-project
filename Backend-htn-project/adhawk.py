@@ -9,6 +9,8 @@ import adhawkapi.frontend
 
 from pygame import mixer
 
+from textGen import generateWarning
+
 notification_threshhold = 4
 app=Flask(__name__)
 close_counter = 0 # notifies user that there is a warning
@@ -20,6 +22,7 @@ xvec_g = 0
 
 yvec_g = 0
 
+message_sent = False
 
 class FrontendData:
     ''' BLE Frontend '''
@@ -58,6 +61,7 @@ class FrontendData:
             global xvec_g
             global yvec_g
             global zvec_g
+            global message_sent
 
             xvec_g = xvec
             yvec_g = yvec
@@ -72,6 +76,10 @@ class FrontendData:
                 close_counter = 0
                 far_counter = 0
                 distance = 0
+                if message_sent == False:
+                    print("SENT!")
+                    generateWarning()
+                    message_sent = True
             elif far_counter >= notification_threshhold:
                 close_counter = 0
                 far_counter = 0
@@ -81,7 +89,7 @@ class FrontendData:
             elif zvec <= -10:
                 far_counter += 1
 
-            print(f'Close_counter={close_counter}')
+            # print(f'Close_counter={close_counter}')
             # print(f'Far_counter={far_counter}')
             # print(f'Z-Gaze={zvec:.2f}')
             # print(f'Distance={distance}')
